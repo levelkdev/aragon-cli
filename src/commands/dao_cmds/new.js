@@ -102,9 +102,12 @@ exports.task = async ({
           const newInstanceTx = kit.methods[fn](...fnArgs)
           const estimatedGas = await newInstanceTx.estimateGas()
 
+          const nonce = await web3.eth.getTransactionCount(ctx.accounts[0])
+
           const { events } = await newInstanceTx.send({
             from: ctx.accounts[0],
             gas: await getRecommendedGasLimit(web3, estimatedGas),
+            nonce,
           })
           ctx.daoAddress = events[deployEvent].returnValues.dao
         },
