@@ -61,6 +61,11 @@ exports.task = async function(
             throw new Error('Cannot find transaction path for executing action')
           }
 
+          const nonce = await web3.eth.getTransactionCount(
+            ctx.transactionPath[0].from
+          )
+          ctx.transactionPath[0].nonce = nonce
+
           task.output = `Waiting for transaction to be mined...`
           ctx.receipt = await web3.eth.sendTransaction(ctx.transactionPath[0])
         },
